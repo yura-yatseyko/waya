@@ -111,17 +111,22 @@ UserSchema.statics.findByCredentials = function (emailOrPhone, password) {
   
 UserSchema.pre('save', function (next) {
     var user = this;
-  
-    if (user.isModified('password')) {
-        bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(user.password, salt, (err, hash) => {
-                user.password = hash;
+
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(user.pinNumber, salt, (err, hash) => {
+            user.pinNumber = hash;
+            if (user.isModified('password')) {
+                bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(user.password, salt, (err, hash) => {
+                        user.password = hash;
+                        next();
+                    });
+                });
+            } else {
                 next();
-            });
+            }
         });
-    } else {
-        next();
-    }
+    });
 });
 
 var User = mongoose.model('User', UserSchema);
