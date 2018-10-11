@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 var countryFlagUpload = upload.single('countryFlagImage');
 
-router.post('/countries',authenticate, countryFlagUpload, (req, res) => {  
+router.post('/countries', authenticate, countryFlagUpload, (req, res) => {  
   var body = lodash.pick(req.body, ['name']);
   var country = new Country(body);
   country.flagImageURL = req.file.path;
