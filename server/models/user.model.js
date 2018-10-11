@@ -72,11 +72,11 @@ UserSchema.methods.checkPinNumber = function (pinNumber) {
 
     return new Promise((resolve, reject) => {
         bcrypt.compare(pinNumber, user.pinNumber, (err, res) => {
-          if (res) {
-            resolve(user);
-          } else {
-            reject();
-          }
+            if (res) {
+                resolve(user);
+            } else {
+                reject();
+            }
         });
     });
 };
@@ -126,21 +126,23 @@ UserSchema.statics.findByCredentials = function (emailOrPhone, password) {
 UserSchema.pre('save', function (next) {
     var user = this;
 
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(user.pinNumber, salt, (err, hash) => {
-            user.pinNumber = hash;
-            if (user.isModified('password')) {
+    if (user.isModified('password')) {
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(user.password, salt, (err, hash) => {
+                user.password = hash;
+
                 bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(user.password, salt, (err, hash) => {
-                        user.password = hash;
+                    bcrypt.hash(user.pinNumber, salt, (err, hash) => {
+                        user.pinNumber = hash;
+                        
                         next();
                     });
                 });
-            } else {
-                next();
-            }
+            });
         });
-    });
+    } else {
+        next();
+    }
 });
 
 var User = mongoose.model('User', UserSchema);

@@ -27,11 +27,10 @@ router.post('/signin', (req, res) => {
 router.post('/signin/pin', authenticate, (req, res) => {
   var body = lodash.pick(req.body, ['pinNumber']);
 
-  req.user.checkPinNumber(body.pinNumber).then(() => {
+  req.user.checkPinNumber(body.pinNumber).then((user) => {
     res.status(200).send({
         success: true,
-        data: {
-        }
+        data: user
     });
   }, () => {
     res.status(400).send();
