@@ -66,6 +66,20 @@ UserSchema.methods.removeToken = function (token) {
       }
     });
 };
+
+UserSchema.methods.checkPinNumber = function (pinNumber) {
+    var user = this;
+
+    return new Promise((resolve, reject) => {
+        bcrypt.compare(pinNumber, user.pinNumber, (err, res) => {
+          if (res) {
+            resolve(user);
+          } else {
+            reject();
+          }
+        });
+    });
+};
   
 UserSchema.statics.findByToken = function (token) {
     var User = this;

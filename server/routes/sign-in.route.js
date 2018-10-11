@@ -2,6 +2,7 @@ const express = require('express');
 const lodash = require('lodash');
 var bodyParser = require('body-parser');
 
+var {authenticate} = require('../middleware/authenticate');
 const {User} = require('../models/user.model');
 
 const router = express.Router();
@@ -21,6 +22,20 @@ router.post('/signin', (req, res) => {
     }).catch((e) => {
       res.status(400).send();
     });
+});
+
+router.post('/signin/pin', authenticate, (req, res) => {
+  var body = lodash.pick(req.body, ['pinNumber']);
+
+  req.user.checkPinNumber(body.pinNumber).then(() => {
+    res.status(200).send({
+        success: true,
+        data: {
+        }
+    });
+  }, () => {
+    res.status(400).send();
+  });
 });
 
 module.exports = router;
