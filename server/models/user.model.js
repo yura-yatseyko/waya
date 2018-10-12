@@ -80,6 +80,22 @@ UserSchema.methods.checkPinNumber = function (pinNumber) {
         });
     });
 };
+
+UserSchema.methods.updateUserData = function (data) {
+    var user = this;
+
+    user.email = data.email;
+    user.phone = data.phone;
+    user.name = data.name;
+
+    return new Promise((resolve, reject) => {
+        user.save().then((doc) => {
+            resolve(doc) ;
+        }, () => {
+            reject();
+        });
+    });
+};
   
 UserSchema.statics.findByToken = function (token) {
     var User = this;
