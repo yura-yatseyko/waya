@@ -25,4 +25,17 @@ router.post('/users/update', authenticate, (req, res) => {
   });
 });
 
+router.post('/users/update/password', authenticate, (req, res) => {
+  var body = lodash.pick(req.body, ['password', 'newPassword']);
+
+  req.user.updateUserPassword(body.password, body.newPassword).then((user) => {
+    res.status(200).send({
+        success: true,
+        data: user
+    });
+  }, () => {
+    res.status(400).send();
+  });
+});
+
 module.exports = router;

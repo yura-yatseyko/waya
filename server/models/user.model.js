@@ -81,6 +81,31 @@ UserSchema.methods.checkPinNumber = function (pinNumber) {
     });
 };
 
+UserSchema.methods.updateUserPassword = function (password, newPassword) {
+    var user = this;
+
+    return new Promise((resolve, reject) => {
+        bcrypt.compare(password, user.password, (err, res) => {
+            if (res) {
+                bcrypt.genSalt(10, (err, salt) => {
+                    if (err) {
+                        reject();
+                    } else {
+                        user.password = newPassword;
+                        user.save().then((doc) => {
+                            resolve(doc) ;
+                        }, () => {
+                            reject();
+                        });
+                    }
+                });
+            } else {
+                reject();
+            }
+        });
+    });
+};
+
 UserSchema.methods.updateUserData = function (data) {
     var user = this;
 
@@ -143,6 +168,7 @@ UserSchema.pre('save', function (next) {
     var user = this;
 
     if (user.isModified('password')) {
+    
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(user.password, salt, (err, hash) => {
                 user.password = hash;
