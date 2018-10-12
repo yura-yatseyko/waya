@@ -28,6 +28,10 @@ var Transaction = mongoose.model('Transaction', {
     transactionStatus: {
         type: String,
         enum: ['Failed', 'In Process', 'Founds Delivered']
+    },
+    _creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     }
 });
 
