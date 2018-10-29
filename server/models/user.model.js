@@ -71,13 +71,11 @@ UserSchema.methods.checkPinNumber = function (pinNumber) {
     var user = this;
 
     return new Promise((resolve, reject) => {
-        bcrypt.compare(pinNumber, user.pinNumber, (err, res) => {
-            if (res) {
-                resolve(user);
-            } else {
-                reject();
-            }
-        });
+        if (user.pinNumber == pinNumber) {
+            resolve(user);
+        } else {
+            reject();
+        }
     });
 };
 
@@ -172,14 +170,7 @@ UserSchema.pre('save', function (next) {
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(user.password, salt, (err, hash) => {
                 user.password = hash;
-
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(user.pinNumber, salt, (err, hash) => {
-                        user.pinNumber = hash;
-                        
-                        next();
-                    });
-                });
+                next();
             });
         });
     } else {
