@@ -11,6 +11,9 @@ var PaymentCard = mongoose.model('PaymentCard', {
     validThru: {
         type: String
     },
+    type: {
+        type: String
+    },
     _creator: {
         type: mongoose.Schema.Types.ObjectId,
     }

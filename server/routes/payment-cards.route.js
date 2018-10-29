@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 router.post('/paymentcards', authenticate, (req, res) => {
-    var body = lodash.pick(req.body, ['cardNumber', 'cardHolderName', 'validThru']);
+    var body = lodash.pick(req.body, ['cardNumber', 'cardHolderName', 'validThru', 'type']);
     
     var paymentCard = new PaymentCard(body);
     paymentCard._creator = req.user._id
