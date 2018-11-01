@@ -20,6 +20,11 @@ var UserSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
+    phoneNumberCode: {
+        type: String,
+        unique: true,
+        required: true
+    },
     name: {
         type: String,
         required: true

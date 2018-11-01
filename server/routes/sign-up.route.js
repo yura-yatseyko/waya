@@ -9,7 +9,7 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 router.post('/signup', (req, res) => {  
-    var body = lodash.pick(req.body, ['email', 'phone', 'name', 'password', 'pinNumber']);
+    var body = lodash.pick(req.body, ['email', 'phone', 'phoneNumberCode', 'name', 'password', 'pinNumber']);
     
     var user = new User(body);
     
