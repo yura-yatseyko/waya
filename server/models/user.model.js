@@ -22,7 +22,6 @@ var UserSchema = new mongoose.Schema({
     },
     phoneNumberCode: {
         type: String,
-        unique: true,
         required: true
     },
     name: {
